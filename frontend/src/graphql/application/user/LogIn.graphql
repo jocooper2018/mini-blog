@@ -1,0 +1,8 @@
+mutation logIn($logInDto: LogInDto!) {
+  logIn(logInDto: $logInDto) {
+    id
+    email
+    username
+    createdAt
+  }
+}

@@ -1,0 +1,11 @@
+query GetManyPost($authorId: Int) {
+  getManyPost(authorId: $authorId) {
+    id
+    authorId
+    title
+    content
+    published
+    createdAt
+    updatedAt
+  }
+}

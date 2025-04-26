@@ -1,0 +1,16 @@
+.edit-post-page > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-post-page a {
+  color: black;
+  text-decoration: none;
+}
+
+.edit-post-page a:hover {
+  text-decoration: underline;
+}
+

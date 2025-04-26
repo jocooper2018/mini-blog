@@ -1,0 +1,11 @@
+mutation CreatePost($createPostDto: CreatePostDto!) {
+  createPost(createPostDto: $createPostDto) {
+    id
+    authorId
+    title
+    content
+    published
+    createdAt
+    updatedAt
+  }
+}

@@ -1,0 +1,11 @@
+mutation UpdatePost($updatePostDto: UpdatePostDto!) {
+  updatePost(updatePostDto: $updatePostDto) {
+    id
+    authorId
+    title
+    content
+    published
+    createdAt
+    updatedAt
+  }
+}

@@ -1,0 +1,8 @@
+query GetLoggedUser {
+  getLoggedUser {
+    id
+    email
+    username
+    createdAt
+  }
+}

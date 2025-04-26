@@ -1,0 +1,76 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  email: String!
+  username: String!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Post {
+  id: Int!
+  authorId: Int!
+  title: String!
+  content: String!
+  published: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  getAllUsers: [User!]!
+  getOneUserById(id: Int!): User!
+  getLoggedUser: User!
+  checkIfUserWithEmailExist(email: String!): Boolean!
+  getManyPost(authorId: Int): [Post!]!
+  getOnePostById(id: Int!): Post!
+}
+
+type Mutation {
+  createUser(createUserDto: CreateUserDto!): User!
+  logIn(logInDto: LogInDto!): User!
+  logOut: Boolean!
+  updateUser(updateUserDto: UpdateUserDto!): User!
+  deleteUser(id: Int!): User!
+  createPost(createPostDto: CreatePostDto!): Post!
+  updatePost(updatePostDto: UpdatePostDto!): Post!
+  deletePost(id: Int!): Post!
+}
+
+input CreateUserDto {
+  email: String!
+  username: String!
+  password: String!
+}
+
+input LogInDto {
+  email: String!
+  password: String!
+}
+
+input UpdateUserDto {
+  id: Int!
+  email: String
+  username: String
+  password: String
+}
+
+input CreatePostDto {
+  authorId: Int!
+  title: String!
+  content: String!
+}
+
+input UpdatePostDto {
+  id: Int!
+  title: String
+  content: String
+  published: Boolean
+}

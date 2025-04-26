@@ -1,0 +1,35 @@
+services:
+  postgresdb:
+    container_name: postgresdb
+    image: postgres:16.0
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data
+    ports:
+      - 0.0.0.0:${PGDB_PORT}:5432
+    environment:
+      POSTGRES_PASSWORD: ${DB_ROOT_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - miniblog
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 0.0.0.0:${PGADMIN_PORT}:80
+    environment:
+      VIRTUAL_HOST: localhost
+      PGADMIN_DEFAULT_EMAIL: ${EQUIPE}@dbadmin.com
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_DISABLE_POSTFIX: true
+    networks:
+      - miniblog
+    depends_on:
+      - postgresdb
+    user: "${UID}:${GID}"
+
+
+networks:
+  miniblog:

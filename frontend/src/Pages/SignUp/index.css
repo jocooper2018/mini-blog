@@ -1,0 +1,12 @@
+.signup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 3rem;
+}
+
+.signup-page > h1 {
+  margin: 0;
+}
+

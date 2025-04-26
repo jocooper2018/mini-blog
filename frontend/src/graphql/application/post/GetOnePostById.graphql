@@ -1,0 +1,11 @@
+query GetOnePostById($id: Int!) {
+  getOnePostById(id: $id) {
+    id
+    authorId
+    title
+    content
+    published
+    createdAt
+    updatedAt
+  }
+}
