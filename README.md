@@ -10,68 +10,74 @@ A minimalistic blog application built with **NestJS**, **Prisma**, **GraphQL**, 
 
 ## Installation
 
-1. Clone the repository.
-    - HTTPS:
+### Clone the repository
 
-        ```bash
-        git clone https://github.com/jocooper2018/mini-blog.git
-        ```
-
-    - SSH:
-
-        ```bash
-        git clone git@github.com:jocooper2018/mini-blog.git
-        ```
-
-2. Install dependencies  
-   In both the `backend/` and `frontend/` directories:
+- HTTPS:
 
     ```bash
-    yarn install
+    git clone https://github.com/jocooper2018/mini-blog.git
     ```
 
-3. Configure environment variables
-
-    - Copy the example environment files:
-
-       ```bash
-       cp docker/.env.example docker/.env
-       cp backend/.env.example backend/.env
-       ```
-
-    - Edit docker/.env and backend/.env with secure and coherent values.
-
-4. Start the database  
-    In the `docker/` directory
+- SSH:
 
     ```bash
-    docker compose up --build && docker compose logs -f
+    git clone git@github.com:jocooper2018/mini-blog.git
     ```
 
-5. Initialize the database schema  
-    In the backend/ directory:
+### Install dependencies
 
-    ```bash
-    npx prisma migrate dev
-    ```
+In both the `backend/` and `frontend/` directories:
 
-6. Start the backend server  
-    In the `backend/` directory:
+```bash
+yarn install
+```
 
-    ```bash
-    yarn start:dev
-    ```
+### Configure environment variables
 
-    The GraphQL API is available at: [http://localhost:3000/graphql](http://localhost:3000/graphql).
+- Copy the example environment files:
 
-7. Start the frontend
-    In the frontend/ directory:
+   ```bash
+   cp docker/.env.example docker/.env
+   cp backend/.env.example backend/.env
+   ```
 
-    ```bash
-    yarn dev
-    ```
+- Edit docker/.env and backend/.env with secure and coherent values.
 
-    The blog is available at [http://localhost:5173](http://localhost:5173).
+### Start the database
+
+In the `docker/` directory:
+
+```bash
+docker compose up --build && docker compose logs -f
+```
+
+### Initialize the database schema
+
+In the backend/ directory:
+
+```bash
+npx prisma migrate dev
+```
+
+### Start the backend server
+
+In the `backend/` directory:
+
+```bash
+yarn start:dev
+```
+
+The GraphQL API is available at: [http://localhost:3000/graphql](http://localhost:3000/graphql).
+
+### Start the frontend
+
+In the frontend/ directory:
+
+```bash
+yarn dev
+```
+
+The blog is available at [http://localhost:5173](http://localhost:5173).
 
 ## Project Structure
 
