@@ -41,7 +41,7 @@ yarn install
    cp backend/.env.example backend/.env
    ```
 
-- Edit docker/.env and backend/.env with secure and coherent values.
+- Edit `docker/.env` and `backend/.env` with secure and coherent values.
 
 ### Start the database
 
@@ -53,7 +53,7 @@ docker compose up --build && docker compose logs -f
 
 ### Initialize the database schema
 
-In the backend/ directory:
+In the `backend/` directory:
 
 ```bash
 npx prisma migrate dev
@@ -71,7 +71,7 @@ The GraphQL API is available at: [http://localhost:3000/graphql](http://localhos
 
 ### Start the frontend
 
-In the frontend/ directory:
+In the `frontend/` directory:
 
 ```bash
 yarn dev
