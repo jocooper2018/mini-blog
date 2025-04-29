@@ -9,25 +9,25 @@ export class PostRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createPostDto: CreatePostDto): Promise<Post> {
-    return await this.prisma.post.create({
+    return this.prisma.post.create({
       data: createPostDto,
     });
   }
 
   async findMany(authorId?: number): Promise<Post[]> {
-    return await this.prisma.post.findMany({
+    return this.prisma.post.findMany({
       where: { authorId },
     });
   }
 
   async findOne(id: number) {
-    return await this.prisma.post.findUniqueOrThrow({
+    return this.prisma.post.findUniqueOrThrow({
       where: { id },
     });
   }
 
   async update(id: number, updatePostDto: UpdatePostDto): Promise<Post> {
-    return await this.prisma.post.update({
+    return this.prisma.post.update({
       where: { id },
       data: {
         title: updatePostDto.title,
@@ -39,7 +39,7 @@ export class PostRepository {
   }
 
   async remove(id: number): Promise<Post> {
-    return await this.prisma.post.delete({
+    return this.prisma.post.delete({
       where: { id },
     });
   }
