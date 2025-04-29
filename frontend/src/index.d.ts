@@ -11,6 +11,6 @@ export interface Post {
   title: string;
   content: string;
   published: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
