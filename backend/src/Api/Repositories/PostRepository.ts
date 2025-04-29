@@ -17,6 +17,7 @@ export class PostRepository {
   async findMany(authorId?: number): Promise<Post[]> {
     return this.prisma.post.findMany({
       where: { authorId },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
