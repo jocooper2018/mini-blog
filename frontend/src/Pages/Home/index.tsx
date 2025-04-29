@@ -10,7 +10,7 @@ export default function Home() {
 
   const [getManyPost] = useGetManyPostLazyQuery();
 
-  const handleFetchPosts = async () => {
+  const handleFetchPosts: () => Promise<void> = async (): Promise<void> => {
     const queryResult = await getManyPost();
     if (queryResult.data?.getManyPost) {
       const posts: Post[] = queryResult.data.getManyPost;
@@ -18,8 +18,8 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    (async () => {
+  useEffect((): void => {
+    (async (): Promise<void> => {
       await handleFetchPosts();
     })();
   }, []);
