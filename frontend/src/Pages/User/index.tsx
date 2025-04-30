@@ -2,17 +2,22 @@ import './index.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Post, User } from '../..';
-import formatDate from '../../utils/formatDate';
 import PostList from '../../Components/PostList';
+import UserDataForm from '../../Components/UserDataForm';
 import isUser from '../../utils/isUser';
-import { useGetManyPostLazyQuery, useGetOneUserByIdLazyQuery, useLogOutMutation } from '../../graphql';
+import {
+  useGetManyPostLazyQuery,
+  useGetOneUserByIdLazyQuery,
+  useLogOutMutation,
+  useUpdateUserMutation,
+} from '../../graphql';
 
 interface UserPageProps {
   loggedUser: User | undefined;
   setLoggedUser: (value: User | undefined) => void;
 }
 
-function UserPage(props: UserPageProps) {
+export default function UserPage(props: UserPageProps) {
   const navigate = useNavigate();
   const { userId } = useParams();
 
@@ -22,22 +27,35 @@ function UserPage(props: UserPageProps) {
   const [getOneUserById] = useGetOneUserByIdLazyQuery();
   const [getManyPost] = useGetManyPostLazyQuery();
   const [fetchLogOut] = useLogOutMutation();
+  const [fetchUpdateUser] = useUpdateUserMutation();
 
-  const handleFetch: () => Promise<void> = async (): Promise<void> => {
+  const handleFetchUser: () => Promise<void> = async () => {
     if (!userId) return;
-    const userQueryResult = await getOneUserById({ variables: { id: parseInt(userId) } });
+    const userQueryResult = await getOneUserById({
+      variables: { id: parseInt(userId) },
+    });
     if (!userQueryResult.data?.getOneUserById) {
       return;
     }
-    const user: User = userQueryResult.data?.getOneUserById;
-    setUser(user);
+    const _user: User = userQueryResult.data?.getOneUserById;
+    setUser(_user);
+  };
 
-    const postsQueryResult = await getManyPost({ variables: { authorId: parseInt(userId) } });
+  const handleFetchPosts: () => Promise<void> = async () => {
+    if (!userId) return;
+    const postsQueryResult = await getManyPost({
+      variables: { authorId: parseInt(userId) },
+    });
     if (!postsQueryResult.data?.getManyPost) {
       return;
     }
     const posts: Post[] = postsQueryResult.data.getManyPost;
     setUserPosts(posts);
+  };
+
+  const handleFetch: () => Promise<void> = async (): Promise<void> => {
+    await handleFetchUser();
+    await handleFetchPosts();
   };
 
   const handleLogOut: () => Promise<void> = async (): Promise<void> => {
@@ -60,36 +78,58 @@ function UserPage(props: UserPageProps) {
     isUser(props.loggedUser) &&
     props.loggedUser.id.toString() === userId;
 
+  const handleUpdateUser = async (userData: {
+    email: string;
+    username: string;
+    password: string;
+  }): Promise<boolean> => {
+    if (!userId) return false;
+    if (!myAccount) return false;
+    const updateUserQueryResult = await fetchUpdateUser({
+      variables: {
+        updateUserDto: {
+          id: parseInt(userId),
+          email: userData.email === '' ? undefined : userData.email,
+          username: userData.username === '' ? undefined : userData.username,
+          password: userData.password === '' ? undefined : userData.password,
+        },
+      },
+    });
+    if (!updateUserQueryResult.data?.updateUser) {
+      await handleFetchUser();
+      return false;
+    }
+    const updatedUser: User = updateUserQueryResult.data.updateUser;
+    setUser(updatedUser);
+    await handleFetch();
+    return true;
+  };
+
   return (
     <main className="user-page">
       {myAccount ? (
-        <div>
-          <h1>Mon Compte</h1>
-          <button type="button" onClick={handleLogOut}>
-            Se déconnecter
-          </button>
-        </div>
-      ) : (
-        <h1>Détails de l'utilisateur</h1>
-      )}
-      <h2>{user?.username}</h2>
-      {myAccount ? (
         <>
           <div>
-            <span>Email&nbsp;: </span>
-            <span>{user?.email}</span>
+            <h1>Mon Compte</h1>
+            <button type="button" onClick={handleLogOut}>
+              Se déconnecter
+            </button>
           </div>
-          <div>
-            <span>Date de création&nbsp;: </span>
-            {user ? <span>{formatDate(new Date(user.createdAt))}</span> : null}
-          </div>
+          <UserDataForm
+            setLoggedUser={props.setLoggedUser}
+            handleSubmit={handleUpdateUser}
+            requiredFields={{ email: false, username: false, password: false }}
+            submitMessage="Enregistrer les modifications"
+            defaultValues={{ email: props.loggedUser?.email, username: props.loggedUser?.username }}
+          />
         </>
       ) : (
-        <></>
+        <>
+          <h1>Détails de l'utilisateur</h1>
+          <h2>{user?.username}</h2>
+        </>
       )}
       <PostList postList={userPosts} />
     </main>
   );
 }
-
-export default UserPage;
