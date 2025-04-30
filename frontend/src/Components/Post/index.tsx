@@ -39,7 +39,9 @@ export default function Post(props: PostProps) {
         <h2>
           {props.link ? <Link to={`/post/${id}`}>{title}</Link> : <>{title}</>}
         </h2>
-        {props.myPost ? <Link to={`/post/${id}/update`}>Modifier le poste</Link> : null}
+        {!props.link && props.myPost ? (
+          <Link to={`/post/${id}/update`}>Modifier le post</Link>
+        ) : null}
       </div>
       <div>
         <Link to={`/user/${author?.id}`}>{author?.username}</Link>

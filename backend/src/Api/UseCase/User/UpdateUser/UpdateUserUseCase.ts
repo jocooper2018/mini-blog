@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,6 +11,7 @@ import { UserRepository } from 'src/Api/Repositories/UserRepository';
 import User from 'src/Api/Entities/User';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
+import { emailRegex } from 'src/Core/regex';
 
 @Injectable()
 export default class UpdateUserUseCase
@@ -25,8 +27,25 @@ export default class UpdateUserUseCase
     if (!updateUserDto) {
       throw new BadRequestException('The request body is undefined');
     }
-    if (session.connectedUserId !== updateUserDto.id) {
+    if (!session.connectedUserId) {
       throw new UnauthorizedException('You must log in to update a user');
+    }
+    if (session.connectedUserId !== updateUserDto.id) {
+      throw new ForbiddenException("You can't update another user");
+    }
+    if (
+      updateUserDto.password &&
+      (updateUserDto.password.length < 8 || updateUserDto.password.length > 50)
+    ) {
+      throw new BadRequestException(
+        'The password must be between 8 and 50 characters long.',
+      );
+    }
+    if (updateUserDto.email && !emailRegex.test(updateUserDto.email)) {
+      throw new BadRequestException('Invalid email');
+    }
+    if (updateUserDto.username && updateUserDto.username.length < 3) {
+      throw new BadRequestException('The username must be at least 3 characters long')
     }
     const updateUserDto2: UpdateUserDto = {
       id: updateUserDto.id,
@@ -36,15 +55,6 @@ export default class UpdateUserUseCase
         ? await bcrypt.hash(updateUserDto.password, 10)
         : undefined,
     };
-    // if (updateUserDto.email) {
-    //   updateUserDto2.email = updateUserDto.email;
-    // }
-    // if (updateUserDto.username) {
-    //   updateUserDto2.username = updateUserDto.username;
-    // }
-    // if (updateUserDto.password) {
-    //   updateUserDto2.password = await bcrypt.hash(updateUserDto.password, 10);
-    // }
     try {
       return await this.userRepository.update(updateUserDto2);
     } catch (error) {

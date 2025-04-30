@@ -13,6 +13,7 @@ interface InputProps {
     setInputValue: (value: any) => any;
   };
   children: ReactNode;
+  errorChecker?: () => void;
 }
 
 export default function Input(props: InputProps) {
@@ -37,6 +38,7 @@ export default function Input(props: InputProps) {
             ? (event) => props.state?.setInputValue(event.target.value)
             : undefined
         }
+        onBlur={props.errorChecker}
       />
     </label>
   );
