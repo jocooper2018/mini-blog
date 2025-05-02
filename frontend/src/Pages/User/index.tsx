@@ -11,6 +11,7 @@ import {
   useLogOutMutation,
   useUpdateUserMutation,
 } from '../../graphql';
+import Error404 from '../../Components/Error';
 
 interface UserPageProps {
   loggedUser: User | undefined;
@@ -23,6 +24,7 @@ export default function UserPage(props: UserPageProps) {
 
   const [user, setUser] = useState<User>();
   const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [userExist, setUserExist] = useState<boolean>(true);
 
   const [getOneUserById] = useGetOneUserByIdLazyQuery();
   const [getManyPost] = useGetManyPostLazyQuery();
@@ -35,6 +37,7 @@ export default function UserPage(props: UserPageProps) {
       variables: { id: parseInt(userId) },
     });
     if (!userQueryResult.data?.getOneUserById) {
+      setUserExist(false);
       return;
     }
     const _user: User = userQueryResult.data?.getOneUserById;
@@ -105,31 +108,44 @@ export default function UserPage(props: UserPageProps) {
     return true;
   };
 
-  return (
-    <main className="user-page">
-      {myAccount ? (
-        <>
-          <div>
-            <h1>Mon Compte</h1>
-            <button type="button" onClick={handleLogOut}>
-              Se déconnecter
-            </button>
-          </div>
-          <UserDataForm
-            setLoggedUser={props.setLoggedUser}
-            handleSubmit={handleUpdateUser}
-            requiredFields={{ email: false, username: false, password: false }}
-            submitMessage="Enregistrer les modifications"
-            defaultValues={{ email: props.loggedUser?.email, username: props.loggedUser?.username }}
-          />
-        </>
-      ) : (
-        <>
-          <h1>Détails de l'utilisateur</h1>
-          <h2>{user?.username}</h2>
-        </>
-      )}
-      <PostList postList={userPosts} />
-    </main>
-  );
+  if (!userExist) {
+    return <Error404 />;
+  } else if (user) {
+    return (
+      <main className="user-page">
+        {myAccount ? (
+          <>
+            <div>
+              <h1>Mon Compte</h1>
+              <button type="button" onClick={handleLogOut}>
+                Se déconnecter
+              </button>
+            </div>
+            <UserDataForm
+              setLoggedUser={props.setLoggedUser}
+              handleSubmit={handleUpdateUser}
+              requiredFields={{
+                email: false,
+                username: false,
+                password: false,
+              }}
+              submitMessage="Enregistrer les modifications"
+              defaultValues={{
+                email: props.loggedUser?.email,
+                username: props.loggedUser?.username,
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <h1>Détails de l'utilisateur</h1>
+            <h2>{user?.username}</h2>
+          </>
+        )}
+        <PostList postList={userPosts} />
+      </main>
+    );
+  } else {
+    return <main className="loading" />;
+  }
 }

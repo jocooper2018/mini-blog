@@ -49,6 +49,7 @@ button,
   text-decoration: none;
   border: none;
   border-radius: 0.25rem;
+  text-align: center;
 }
 
 button:enabled,
@@ -83,4 +84,8 @@ button:enabled.delete:hover,
 
 .error-message {
   color: var(--text-error-color);
+}
+
+.loading {
+  cursor: wait;
 }

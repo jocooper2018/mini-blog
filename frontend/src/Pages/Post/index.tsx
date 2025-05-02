@@ -4,6 +4,7 @@ import { Post, User } from '../..';
 import { useParams } from 'react-router-dom';
 import isUser from '../../utils/isUser';
 import { useGetOnePostByIdLazyQuery } from '../../graphql';
+import Error404 from '../../Components/Error';
 
 interface PostPageProps {
   loggedUser: User | undefined;
@@ -13,15 +14,22 @@ export default function PostPage(props: PostPageProps) {
   const { postId } = useParams();
 
   const [postData, setPostData] = useState<Post>();
+  const [postExist, setPostExist] = useState<boolean>(true);
+
   const [getOnePostById] = useGetOnePostByIdLazyQuery();
 
   const handleFetchPosts: () => Promise<void> = async (): Promise<void> => {
     if (!postId) return;
-    const queryResult = await getOnePostById({ variables: { id: parseInt(postId) } });
-    if (queryResult.data?.getOnePostById) {
-      const post: Post = queryResult.data.getOnePostById;
-      setPostData(post);
+    const queryResult = await getOnePostById({
+      variables: { id: parseInt(postId) },
+    });
+    if (!queryResult.data?.getOnePostById) {
+      setPostExist(false);
+      console.error('404');
+      return;
     }
+    const post: Post = queryResult.data.getOnePostById;
+    setPostData(post);
   };
 
   useEffect((): void => {
@@ -35,5 +43,15 @@ export default function PostPage(props: PostPageProps) {
     isUser(props.loggedUser) &&
     props.loggedUser.id === postData?.authorId;
 
-  return <main>{postData ? <PostComponent postData={postData} myPost={myPost} /> : null}</main>;
+  if (!postExist) {
+    return <Error404 />;
+  } else if (postData) {
+    return (
+      <main>
+        <PostComponent postData={postData} myPost={myPost} />
+      </main>
+    );
+  } else {
+    return <main className="loading" />;
+  }
 }

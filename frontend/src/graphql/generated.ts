@@ -173,6 +173,13 @@ export type GetOnePostByIdQueryVariables = Exact<{
 
 export type GetOnePostByIdQuery = { __typename?: 'Query', getOnePostById: { __typename?: 'Post', id: number, authorId: number, title: string, content: string, published: boolean, createdAt: any, updatedAt: any } };
 
+export type PostExistQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type PostExistQuery = { __typename?: 'Query', getOnePostById: { __typename?: 'Post', id: number } };
+
 export type UpdatePostMutationVariables = Exact<{
   updatePostDto: UpdatePostDto;
 }>;
@@ -396,6 +403,46 @@ export type GetOnePostByIdQueryHookResult = ReturnType<typeof useGetOnePostByIdQ
 export type GetOnePostByIdLazyQueryHookResult = ReturnType<typeof useGetOnePostByIdLazyQuery>;
 export type GetOnePostByIdSuspenseQueryHookResult = ReturnType<typeof useGetOnePostByIdSuspenseQuery>;
 export type GetOnePostByIdQueryResult = Apollo.QueryResult<GetOnePostByIdQuery, GetOnePostByIdQueryVariables>;
+export const PostExistDocument = gql`
+    query PostExist($id: Int!) {
+  getOnePostById(id: $id) {
+    id
+  }
+}
+    `;
+
+/**
+ * __usePostExistQuery__
+ *
+ * To run a query within a React component, call `usePostExistQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostExistQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostExistQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePostExistQuery(baseOptions: Apollo.QueryHookOptions<PostExistQuery, PostExistQueryVariables> & ({ variables: PostExistQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostExistQuery, PostExistQueryVariables>(PostExistDocument, options);
+      }
+export function usePostExistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostExistQuery, PostExistQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostExistQuery, PostExistQueryVariables>(PostExistDocument, options);
+        }
+export function usePostExistSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PostExistQuery, PostExistQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PostExistQuery, PostExistQueryVariables>(PostExistDocument, options);
+        }
+export type PostExistQueryHookResult = ReturnType<typeof usePostExistQuery>;
+export type PostExistLazyQueryHookResult = ReturnType<typeof usePostExistLazyQuery>;
+export type PostExistSuspenseQueryHookResult = ReturnType<typeof usePostExistSuspenseQuery>;
+export type PostExistQueryResult = Apollo.QueryResult<PostExistQuery, PostExistQueryVariables>;
 export const UpdatePostDocument = gql`
     mutation UpdatePost($updatePostDto: UpdatePostDto!) {
   updatePost(updatePostDto: $updatePostDto) {
@@ -700,6 +747,7 @@ export const namedOperations = {
   Query: {
     GetManyPost: 'GetManyPost',
     GetOnePostById: 'GetOnePostById',
+    PostExist: 'PostExist',
     CheckIfUserWithEmailExist: 'CheckIfUserWithEmailExist',
     GetLoggedUser: 'GetLoggedUser',
     GetOneUserById: 'GetOneUserById'

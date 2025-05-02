@@ -3,7 +3,11 @@ import { User } from '../..';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PostEditor from '../../Components/PostEditor';
-import { useGetOnePostByIdLazyQuery, useUpdatePostMutation } from '../../graphql';
+import {
+  useGetOnePostByIdLazyQuery,
+  useUpdatePostMutation,
+} from '../../graphql';
+import Error404 from '../../Components/Error';
 
 interface EditPostPageProps {
   loggedUser: User | undefined;
@@ -12,6 +16,7 @@ interface EditPostPageProps {
 export default function EditPostPage(props: EditPostPageProps) {
   const [postTitle, setPostTitle] = useState<string>('');
   const [postContent, setPostContent] = useState<string>('');
+  const [postExist, setPostExist] = useState<boolean>(true);
 
   const [getOnePostById] = useGetOnePostByIdLazyQuery();
   const [updatePost] = useUpdatePostMutation();
@@ -22,8 +27,14 @@ export default function EditPostPage(props: EditPostPageProps) {
 
   const handleGetCurrentPost: () => Promise<void> = async (): Promise<void> => {
     if (!postId) return;
-    const queryResult = await getOnePostById({ variables: { id: parseInt(postId) } });
-    if (!queryResult.data?.getOnePostById) return;
+    const queryResult = await getOnePostById({
+      variables: { id: parseInt(postId) },
+    });
+    if (!queryResult.data?.getOnePostById) {
+      setPostExist(false);
+      console.error('404');
+      return;
+    }
     setPostTitle(queryResult.data.getOnePostById.title);
     setPostContent(queryResult.data.getOnePostById.content);
   };
@@ -49,22 +60,28 @@ export default function EditPostPage(props: EditPostPageProps) {
     })();
   }, []);
 
-  return !props.loggedUser ? (
-    <Navigate to={''} />
-  ) : (
-    <main className="edit-post-page">
-      <div>
-        <h1>Modifier le post</h1>
-        <Link to={`/post/${postId}`} className='button'>Annuler</Link>
-      </div>
-      <PostEditor
-        type="update"
-        postTitle={postTitle}
-        setPostTitle={setPostTitle}
-        postContent={postContent}
-        setPostContent={setPostContent}
-        handleSubmit={handleUpdatePost}
-      />
-    </main>
-  );
+  if (!postExist) {
+    return <Error404 />;
+  } else if (!props.loggedUser) {
+    return <Navigate to={`/post/${postId}`} />;
+  } else {
+    return (
+      <main className="edit-post-page">
+        <div>
+          <h1>Modifier le post</h1>
+          <Link to={`/post/${postId}`} className="button">
+            Annuler
+          </Link>
+        </div>
+        <PostEditor
+          type="update"
+          postTitle={postTitle}
+          setPostTitle={setPostTitle}
+          postContent={postContent}
+          setPostContent={setPostContent}
+          handleSubmit={handleUpdatePost}
+        />
+      </main>
+    );
+  }
 }
