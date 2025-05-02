@@ -14,11 +14,6 @@
 }
 
 .input .error-message {
-  /* position: absolute;
-  left: 105%;
-  bottom: 0.25rem;
-  text-wrap: nowrap; */
-  color: red;
   display: none;
 }
 
