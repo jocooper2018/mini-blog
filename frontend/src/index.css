@@ -85,3 +85,7 @@ button:enabled.delete:hover,
 .error-message {
   color: var(--text-error-color);
 }
+
+.loading {
+  cursor: wait;
+}

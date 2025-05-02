@@ -43,16 +43,15 @@ export default function PostPage(props: PostPageProps) {
     isUser(props.loggedUser) &&
     props.loggedUser.id === postData?.authorId;
 
-  let mainContent = <main />;
   if (!postExist) {
-    mainContent = <Error404 />;
+    return <Error404 />;
   } else if (postData) {
-    mainContent = (
+    return (
       <main>
         <PostComponent postData={postData} myPost={myPost} />
       </main>
     );
+  } else {
+    return <main className="loading" />;
   }
-
-  return mainContent;
 }
