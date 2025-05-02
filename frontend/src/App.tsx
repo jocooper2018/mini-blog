@@ -11,20 +11,22 @@ import EditPostPage from './Pages/EditPostPage';
 import { useEffect, useState } from 'react';
 import { User } from '.';
 import { useGetLoggedUserLazyQuery } from './graphql';
+import Error404 from './Components/Error';
 
 export default function App() {
   const [loggedUser, setLoggedUser] = useState<User | undefined>();
 
   const [getLoggedUser] = useGetLoggedUserLazyQuery();
 
-  const handleFetchLoggedUser: () => Promise<void> = async (): Promise<void> => {
-    const queryResult = await getLoggedUser();
-    if (!queryResult.data?.getLoggedUser) {
-      return;
-    }
-    const user: User = queryResult.data.getLoggedUser;
-    setLoggedUser(user);
-  };
+  const handleFetchLoggedUser: () => Promise<void> =
+    async (): Promise<void> => {
+      const queryResult = await getLoggedUser();
+      if (!queryResult.data?.getLoggedUser) {
+        return;
+      }
+      const user: User = queryResult.data.getLoggedUser;
+      setLoggedUser(user);
+    };
 
   useEffect((): void => {
     (async (): Promise<void> => {
@@ -68,6 +70,7 @@ export default function App() {
           element={<CreatePost loggedUser={loggedUser} />}
         />
         <Route />
+        <Route path="*" element={<Error404 />} />
       </Routes>
       <Footer />
     </BrowserRouter>

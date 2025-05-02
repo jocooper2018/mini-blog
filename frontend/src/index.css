@@ -49,6 +49,7 @@ button,
   text-decoration: none;
   border: none;
   border-radius: 0.25rem;
+  text-align: center;
 }
 
 button:enabled,
