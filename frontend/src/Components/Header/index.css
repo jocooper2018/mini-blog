@@ -17,15 +17,5 @@ header > nav > ul {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-header a {
-    display: block;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    color: black;
-}
-
-header a:hover {
-    background-color: #e0e0e0;
+  gap: 1rem;
 }

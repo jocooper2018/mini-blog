@@ -55,7 +55,7 @@ export default function EditPostPage(props: EditPostPageProps) {
     <main className="edit-post-page">
       <div>
         <h1>Modifier le post</h1>
-        <Link to={`/post/${postId}`}>Annuler</Link>
+        <Link to={`/post/${postId}`} className='button'>Annuler</Link>
       </div>
       <PostEditor
         type="update"

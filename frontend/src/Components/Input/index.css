@@ -18,7 +18,8 @@
 }
 
 .input.error input {
-  border-color: red;
+  color: var(--text-error-color);
+  border-color: var(--text-error-color);
 }
 
 .input.error .error-message {

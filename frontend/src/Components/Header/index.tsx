@@ -11,22 +11,30 @@ export default function Header(props: HeaderProps) {
   return (
     <header>
       <nav>
-        <Link to="/">Accueil</Link>
+        <Link to="/" className="button">
+          Accueil
+        </Link>
       </nav>
       <nav>
         <ul>
           {props.loggedUser && isUser(props.loggedUser) ? (
             <>
               <li>
-                <Link to="/create">+ Créer</Link>
+                <Link to="/create" className="button">
+                  + Créer
+                </Link>
               </li>
               <li>
-                <Link to={`/user/${props.loggedUser.id}`}>Mon compte</Link>
+                <Link to={`/user/${props.loggedUser.id}`} className="button">
+                  Mon compte
+                </Link>
               </li>
             </>
           ) : (
             <li>
-              <Link to="/login">Se connecter</Link>
+              <Link to="/login" className="button">
+                Se connecter
+              </Link>
             </li>
           )}
         </ul>
