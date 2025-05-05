@@ -8,18 +8,26 @@ import { Prisma } from '@prisma/client';
 import { UseCase } from 'src';
 import Post from 'src/Api/Entities/Post';
 import { PostRepository } from 'src/Api/Repositories/PostRepository';
+import UseCaseFactory from '../../UseCaseFactory';
+import GetOnePostUseCase from '../GetOnePost/GetOnePostUseCase';
 
 @Injectable()
 export default class DeletePostUseCase
   implements UseCase<Promise<Post>, [id: number, session: Record<string, any>]>
 {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    private readonly postRepository: PostRepository,
+    private readonly useCaseFactory: UseCaseFactory,
+  ) {}
 
   async handle(id: number, session: Record<string, any>): Promise<Post> {
     if (!session.connectedUserId) {
       throw new UnauthorizedException('You must log in to delete a post');
     }
-    if (session.connectedUserId !== id) {
+    const postToDelete = await (
+      await this.useCaseFactory.create(GetOnePostUseCase)
+    ).handle(id);
+    if (session.connectedUserId !== postToDelete.authorId) {
       throw new ForbiddenException("You can't delete someone else post");
     }
     try {

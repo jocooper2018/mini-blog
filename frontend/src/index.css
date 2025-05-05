@@ -50,6 +50,7 @@ button,
   border: none;
   border-radius: 0.25rem;
   text-align: center;
+  align-self: center;
 }
 
 button:enabled,
