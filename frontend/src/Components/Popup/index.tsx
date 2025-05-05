@@ -4,7 +4,7 @@ import { ReactNode, useState } from 'react';
 interface PopupProps {
   actionText: string;
   class?: string;
-  action?: () => void;
+  action?: () => Promise<void>;
   children: ReactNode;
 }
 
@@ -28,7 +28,10 @@ export default function Popup(props: PopupProps) {
             <button
               type="button"
               className={props.class}
-              onClick={props.action}
+              onClick={async () => {
+                await props.action!();
+                setIsOpen(false);
+              }}
             >
               {props.actionText}
             </button>
