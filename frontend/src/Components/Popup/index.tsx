@@ -2,28 +2,32 @@ import './index.css';
 import { ReactNode, useState } from 'react';
 
 interface PopupProps {
-  actionText: string;
-  class?: string;
-  action?: () => Promise<void>;
   children: ReactNode;
+  actionText?: string;
+  action?: () => Promise<void>;
+  class?: string;
+  noTrigger?: boolean;
+  closeButton?: ReactNode;
 }
 
 export default function Popup(props: PopupProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  return isOpen ? (
+  return isOpen || props.noTrigger ? (
     <div className="popup">
       <div>
         <div>{props.children}</div>
         <div>
-          <button
-            type="button"
-            onClick={() => {
-              setIsOpen(false);
-            }}
-          >
-            {props.action ? 'Annuler' : 'Fermer'}
-          </button>
+          {props.closeButton ?? (
+            <button
+              type="button"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              {props.action ? 'Annuler' : 'Fermer'}
+            </button>
+          )}
           {props.action ? (
             <button
               type="button"
