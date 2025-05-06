@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -15,8 +16,11 @@ export default class DeleteUserUseCase
   constructor(private readonly userRepository: UserRepository) {}
 
   async handle(id: number, session: Record<string, any>): Promise<User> {
-    if (session.connectedUserId !== id) {
+    if (!session.connectedUserId) {
       throw new UnauthorizedException('You must log in to delete a user');
+    }
+    if (session.connectedUserId !== id) {
+      throw new ForbiddenException("You cannot delete another user's account");
     }
     try {
       return await this.userRepository.remove(id);
