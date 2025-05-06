@@ -5,7 +5,6 @@ import { Post } from '../..';
 import { useGetManyPostLazyQuery } from '../../graphql';
 
 export default function Home() {
-
   const [postsList, setPosts] = useState<Post[]>([]);
 
   const [getManyPost] = useGetManyPostLazyQuery();
