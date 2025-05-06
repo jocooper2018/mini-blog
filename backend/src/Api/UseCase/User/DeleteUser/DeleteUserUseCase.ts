@@ -8,12 +8,19 @@ import { Prisma } from '@prisma/client';
 import { UseCase } from 'src';
 import User from 'src/Api/Entities/User';
 import { UserRepository } from 'src/Api/Repositories/UserRepository';
+import UseCaseFactory from '../../UseCaseFactory';
+import Post from 'src/Api/Entities/Post';
+import GetManyPostUseCase from '../../Post/GetManyPosts/GetManyPostUseCase';
+import DeletePostUseCase from '../../Post/DeletePost/DeletePostUseCase';
 
 @Injectable()
 export default class DeleteUserUseCase
   implements UseCase<Promise<User>, [id: number, session: Record<string, any>]>
 {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly useCaseFactory: UseCaseFactory,
+  ) {}
 
   async handle(id: number, session: Record<string, any>): Promise<User> {
     if (!session.connectedUserId) {
@@ -21,6 +28,14 @@ export default class DeleteUserUseCase
     }
     if (session.connectedUserId !== id) {
       throw new ForbiddenException("You cannot delete another user's account");
+    }
+    const userPosts: Post[] = await (
+      await this.useCaseFactory.create(GetManyPostUseCase)
+    ).handle(id);
+    for (const post of userPosts) {
+      await (
+        await this.useCaseFactory.create(DeletePostUseCase)
+      ).handle(post.id, session);
     }
     try {
       return await this.userRepository.remove(id);
