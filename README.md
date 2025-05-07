@@ -51,6 +51,25 @@ In the `docker/` directory:
 docker compose up --build && docker compose logs -f
 ```
 
+### Create the session table
+
+1. Open PgAdmin at [http://localhost:8081/](http://localhost:8081/).
+    - Email: `{PGADMIN_USER}@dbadmin.com` with the `PGADMIN_USER` value in `docker/.env` instead of `{PGADMIN_USER}`.
+    - Password: `PGADMIN_PASSWORD` value in `docker/.env`
+
+2. Add a server
+    - General tab
+        - Name: Choose a name (e.g. miniblog)
+    - Connection tab
+        - Host name/address: `postgresdb`
+        - Port: `5432`
+        - Maintenance database: `DB_NAME` value in `docker/.env` (default `miniblog`)
+        - Username: `DB_USER` value in `docker/.env`
+        - Keberos authentication: `disabled`
+        - Password: `DB_ROOT_PASSWORD`  value in `docker/.env`*
+
+3. Select the `miniblog` database, open the Query Tool, and execute the script [session.sql](session.sql).
+
 ### Initialize the database schema
 
 In the `backend/` directory:
