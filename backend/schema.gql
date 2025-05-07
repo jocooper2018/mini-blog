@@ -41,6 +41,7 @@ type Query {
   checkIfUserWithEmailExist(email: String!): Boolean!
   getManyPost(authorId: Int): [Post!]!
   getOnePostById(id: Int!): Post!
+  getManyComment(postId: Int, authorId: Int): [Comment!]!
 }
 
 type Mutation {
