@@ -12,17 +12,24 @@ import UseCaseFactory from '../../UseCaseFactory';
 import Post from 'src/Api/Entities/Post';
 import GetManyPostUseCase from '../../Post/GetManyPosts/GetManyPostUseCase';
 import DeletePostUseCase from '../../Post/DeletePost/DeletePostUseCase';
+import LogOutUseCase from '../LogOut/LogOutUseCase';
+import { Response } from 'express';
 
 @Injectable()
 export default class DeleteUserUseCase
-  implements UseCase<Promise<User>, [id: number, session: Record<string, any>]>
+  implements
+    UseCase<Promise<User>, [id: number, session: Record<string, any>, Response]>
 {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly useCaseFactory: UseCaseFactory,
   ) {}
 
-  async handle(id: number, session: Record<string, any>): Promise<User> {
+  async handle(
+    id: number,
+    session: Record<string, any>,
+    response: Response,
+  ): Promise<User> {
     if (!session.connectedUserId) {
       throw new UnauthorizedException('You must log in to delete a user');
     }
@@ -37,6 +44,9 @@ export default class DeleteUserUseCase
         await this.useCaseFactory.create(DeletePostUseCase)
       ).handle(post.id, session);
     }
+    await (
+      await this.useCaseFactory.create(LogOutUseCase)
+    ).handle(session, response);
     try {
       return await this.userRepository.remove(id);
     } catch (error) {
