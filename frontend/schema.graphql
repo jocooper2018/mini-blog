@@ -8,7 +8,18 @@ schema {
 "Indicates exactly one field must be supplied and this field must not be `null`."
 directive @oneOf on INPUT_OBJECT
 
+type Comment {
+  authorId: Int!
+  content: String!
+  createdAt: DateTime!
+  id: Int!
+  postId: Int!
+  title: String!
+  updatedAt: DateTime!
+}
+
 type Mutation {
+  createComment(createCommentDto: CreateCommentDto!): Comment!
   createPost(createPostDto: CreatePostDto!): Post!
   createUser(createUserDto: CreateUserDto!): User!
   deletePost(id: Int!): Post!
@@ -47,6 +58,13 @@ type User {
 
 "A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
 scalar DateTime
+
+input CreateCommentDto {
+  authorId: Int!
+  content: String!
+  postId: Int!
+  title: String!
+}
 
 input CreatePostDto {
   authorId: Int!

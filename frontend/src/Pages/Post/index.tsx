@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import isUser from '../../utils/isUser';
 import { useGetOnePostByIdLazyQuery } from '../../graphql';
 import Error404 from '../../Components/Error';
+import CreateComment from '../../Components/CreateComment';
 
 interface PostPageProps {
   loggedUser: User | undefined;
@@ -49,6 +50,7 @@ export default function PostPage(props: PostPageProps) {
     return (
       <main>
         <PostComponent postData={postData} myPost={myPost} />
+        <CreateComment loggedUser={props.loggedUser} postId={postData.id} />
       </main>
     );
   } else {
