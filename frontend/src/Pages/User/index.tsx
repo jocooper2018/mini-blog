@@ -1,17 +1,20 @@
 import './index.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Post, User } from '../..';
 import PostList from '../../Components/PostList';
 import UserDataForm from '../../Components/UserDataForm';
 import isUser from '../../utils/isUser';
 import {
+  useDeleteUserMutation,
   useGetManyPostLazyQuery,
   useGetOneUserByIdLazyQuery,
   useLogOutMutation,
   useUpdateUserMutation,
 } from '../../graphql';
 import Error404 from '../../Components/Error';
+import Popup from '../../Components/Popup';
+import { Reference } from '@apollo/client';
 
 interface UserPageProps {
   loggedUser: User | undefined;
@@ -25,11 +28,13 @@ export default function UserPage(props: UserPageProps) {
   const [user, setUser] = useState<User>();
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [userExist, setUserExist] = useState<boolean>(true);
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
   const [getOneUserById] = useGetOneUserByIdLazyQuery();
   const [getManyPost] = useGetManyPostLazyQuery();
   const [fetchLogOut] = useLogOutMutation();
   const [fetchUpdateUser] = useUpdateUserMutation();
+  const [fetchDeleteUser] = useDeleteUserMutation();
 
   const handleFetchUser: () => Promise<void> = async () => {
     if (!userId) return;
@@ -108,6 +113,40 @@ export default function UserPage(props: UserPageProps) {
     return true;
   };
 
+  const handleDeleteUser = async (): Promise<void> => {
+    if (!user) return;
+    const queryResult = await fetchDeleteUser({
+      variables: { id: user.id },
+      update(cache) {
+        const normalizedUserId = cache.identify({
+          id: user.id,
+          __typename: 'User',
+        });
+
+        cache.modify({
+          fields: {
+            getManyPost(
+              existingPostsRefs: readonly Reference[] = [],
+              { readField },
+            ) {
+              return existingPostsRefs.filter(
+                (postRef) => readField('authorId', postRef) !== user.id,
+              );
+            },
+          },
+        });
+
+        cache.evict({ id: normalizedUserId });
+        cache.gc();
+      },
+    });
+    if (!queryResult.data?.deleteUser) {
+      return;
+    }
+    setIsDeleted(true);
+    props.setLoggedUser(undefined);
+  };
+
   if (!userExist) {
     return <Error404 />;
   } else if (user) {
@@ -143,6 +182,27 @@ export default function UserPage(props: UserPageProps) {
           </>
         )}
         <PostList postList={userPosts} />
+        {myAccount ? (
+          <Popup
+            actionText="Supprimer le compte"
+            class="delete"
+            action={handleDeleteUser}
+          >
+            Voulez-vous vraiment supprimer le compte et tous ses posts&nbsp;?
+          </Popup>
+        ) : null}
+        {isDeleted ? (
+          <Popup
+            noTrigger
+            closeButton={
+              <Link to="/" className="button">
+                Retour à l'accueil
+              </Link>
+            }
+          >
+            L'utilisateur et tous ses posts ont été supprimés.
+          </Popup>
+        ) : null}
       </main>
     );
   } else {

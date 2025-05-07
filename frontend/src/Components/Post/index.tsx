@@ -37,7 +37,7 @@ export default function Post(props: PostProps) {
     const queryResult = await fetchDeletePost({
       variables: { id: id },
       update(cache) {
-        const normalizedId = cache.identify({ id, __typename: 'Post' });
+        const normalizedId = cache.identify({ id: id, __typename: 'Post' });
         cache.evict({ id: normalizedId });
         cache.gc();
       },

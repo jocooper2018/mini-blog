@@ -173,13 +173,6 @@ export type GetOnePostByIdQueryVariables = Exact<{
 
 export type GetOnePostByIdQuery = { __typename?: 'Query', getOnePostById: { __typename?: 'Post', id: number, authorId: number, title: string, content: string, published: boolean, createdAt: any, updatedAt: any } };
 
-export type PostExistQueryVariables = Exact<{
-  id: Scalars['Int']['input'];
-}>;
-
-
-export type PostExistQuery = { __typename?: 'Query', getOnePostById: { __typename?: 'Post', id: number } };
-
 export type UpdatePostMutationVariables = Exact<{
   updatePostDto: UpdatePostDto;
 }>;
@@ -200,6 +193,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: number, email: string, username: string, createdAt: any } };
+
+export type DeleteUserMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'User', id: number, email: string, username: string } };
 
 export type GetLoggedUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -403,46 +403,6 @@ export type GetOnePostByIdQueryHookResult = ReturnType<typeof useGetOnePostByIdQ
 export type GetOnePostByIdLazyQueryHookResult = ReturnType<typeof useGetOnePostByIdLazyQuery>;
 export type GetOnePostByIdSuspenseQueryHookResult = ReturnType<typeof useGetOnePostByIdSuspenseQuery>;
 export type GetOnePostByIdQueryResult = Apollo.QueryResult<GetOnePostByIdQuery, GetOnePostByIdQueryVariables>;
-export const PostExistDocument = gql`
-    query PostExist($id: Int!) {
-  getOnePostById(id: $id) {
-    id
-  }
-}
-    `;
-
-/**
- * __usePostExistQuery__
- *
- * To run a query within a React component, call `usePostExistQuery` and pass it any options that fit your needs.
- * When your component renders, `usePostExistQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePostExistQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function usePostExistQuery(baseOptions: Apollo.QueryHookOptions<PostExistQuery, PostExistQueryVariables> & ({ variables: PostExistQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PostExistQuery, PostExistQueryVariables>(PostExistDocument, options);
-      }
-export function usePostExistLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostExistQuery, PostExistQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PostExistQuery, PostExistQueryVariables>(PostExistDocument, options);
-        }
-export function usePostExistSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PostExistQuery, PostExistQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PostExistQuery, PostExistQueryVariables>(PostExistDocument, options);
-        }
-export type PostExistQueryHookResult = ReturnType<typeof usePostExistQuery>;
-export type PostExistLazyQueryHookResult = ReturnType<typeof usePostExistLazyQuery>;
-export type PostExistSuspenseQueryHookResult = ReturnType<typeof usePostExistSuspenseQuery>;
-export type PostExistQueryResult = Apollo.QueryResult<PostExistQuery, PostExistQueryVariables>;
 export const UpdatePostDocument = gql`
     mutation UpdatePost($updatePostDto: UpdatePostDto!) {
   updatePost(updatePostDto: $updatePostDto) {
@@ -556,6 +516,41 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($id: Int!) {
+  deleteUser(id: $id) {
+    id
+    email
+    username
+  }
+}
+    `;
+export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
+
+/**
+ * __useDeleteUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserMutation, { data, loading, error }] = useDeleteUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserMutation, DeleteUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument, options);
+      }
+export type DeleteUserMutationHookResult = ReturnType<typeof useDeleteUserMutation>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
 export const GetLoggedUserDocument = gql`
     query GetLoggedUser {
   getLoggedUser {
@@ -747,7 +742,6 @@ export const namedOperations = {
   Query: {
     GetManyPost: 'GetManyPost',
     GetOnePostById: 'GetOnePostById',
-    PostExist: 'PostExist',
     CheckIfUserWithEmailExist: 'CheckIfUserWithEmailExist',
     GetLoggedUser: 'GetLoggedUser',
     GetOneUserById: 'GetOneUserById'
@@ -757,6 +751,7 @@ export const namedOperations = {
     DeletePost: 'DeletePost',
     UpdatePost: 'UpdatePost',
     CreateUser: 'CreateUser',
+    DeleteUser: 'DeleteUser',
     logIn: 'logIn',
     LogOut: 'LogOut',
     UpdateUser: 'UpdateUser'

@@ -97,6 +97,7 @@ export default class UserResolver {
     return (await this.useCaseFactory.create(DeleteUserUseCase)).handle(
       id,
       context.req.session,
+      context.res,
     );
   }
 }
