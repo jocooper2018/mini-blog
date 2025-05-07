@@ -1,0 +1,11 @@
+mutation CreateComment($createCommentDto: CreateCommentDto!) {
+  createComment(createCommentDto: $createCommentDto) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}

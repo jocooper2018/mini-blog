@@ -18,6 +18,24 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  authorId: Scalars['Int']['output'];
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  postId: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CreateCommentDto = {
+  authorId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  postId: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type CreatePostDto = {
   authorId: Scalars['Int']['input'];
   content: Scalars['String']['input'];
@@ -37,6 +55,7 @@ export type LogInDto = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createComment: Comment;
   createPost: Post;
   createUser: User;
   deletePost: Post;
@@ -45,6 +64,11 @@ export type Mutation = {
   logOut: Scalars['Boolean']['output'];
   updatePost: Post;
   updateUser: User;
+};
+
+
+export type MutationCreateCommentArgs = {
+  createCommentDto: CreateCommentDto;
 };
 
 
@@ -145,6 +169,13 @@ export type User = {
   username: Scalars['String']['output'];
 };
 
+export type CreateCommentMutationVariables = Exact<{
+  createCommentDto: CreateCommentDto;
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any } };
+
 export type CreatePostMutationVariables = Exact<{
   createPostDto: CreatePostDto;
 }>;
@@ -233,6 +264,45 @@ export type UpdateUserMutationVariables = Exact<{
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, username: string, createdAt: any } };
 
 
+export const CreateCommentDocument = gql`
+    mutation CreateComment($createCommentDto: CreateCommentDto!) {
+  createComment(createCommentDto: $createCommentDto) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      createCommentDto: // value for 'createCommentDto'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($createPostDto: CreatePostDto!) {
   createPost(createPostDto: $createPostDto) {
@@ -747,6 +817,7 @@ export const namedOperations = {
     GetOneUserById: 'GetOneUserById'
   },
   Mutation: {
+    CreateComment: 'CreateComment',
     CreatePost: 'CreatePost',
     DeletePost: 'DeletePost',
     UpdatePost: 'UpdatePost',

@@ -24,6 +24,16 @@ type Post {
   updatedAt: DateTime!
 }
 
+type Comment {
+  id: Int!
+  authorId: Int!
+  postId: Int!
+  title: String!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getAllUsers: [User!]!
   getOneUserById(id: Int!): User!
@@ -42,6 +52,7 @@ type Mutation {
   createPost(createPostDto: CreatePostDto!): Post!
   updatePost(updatePostDto: UpdatePostDto!): Post!
   deletePost(id: Int!): Post!
+  createComment(createCommentDto: CreateCommentDto!): Comment!
 }
 
 input CreateUserDto {
@@ -73,4 +84,11 @@ input UpdatePostDto {
   title: String
   content: String
   published: Boolean
+}
+
+input CreateCommentDto {
+  authorId: Int!
+  postId: Int!
+  title: String!
+  content: String!
 }
