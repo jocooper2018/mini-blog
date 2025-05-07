@@ -8,6 +8,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import UserResolver from './Api/Resolvers/UserResolver';
 import { PrismaService } from './PrismaService';
 import PostResolver from './Api/Resolvers/PostResolver';
+import CommentResolver from './Api/Resolvers/CommentResolver';
+import CommentRepository from './Api/Repositories/CommentRepository';
 
 @Module({
   imports: [
@@ -31,10 +33,12 @@ import PostResolver from './Api/Resolvers/PostResolver';
   providers: [
     PrismaService,
     UseCaseFactory,
-    UserRepository,
-    PostRepository,
     UserResolver,
+    UserRepository,
     PostResolver,
+    PostRepository,
+    CommentResolver,
+    CommentRepository,
   ],
 })
 export class AppModule {}

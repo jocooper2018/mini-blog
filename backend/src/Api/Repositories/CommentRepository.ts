@@ -1,0 +1,13 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/PrismaService';
+import CreateCommentDto from '../UseCase/Comment/CreateComment/CreateCommentDto';
+import Comment from '../Entities/Comment';
+
+@Injectable()
+export default class CommentRepository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createCommentDto: CreateCommentDto): Promise<Comment> {
+    return this.prisma.comment.create({ data: createCommentDto });
+  }
+}
