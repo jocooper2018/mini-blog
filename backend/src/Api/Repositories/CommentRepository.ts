@@ -11,6 +11,10 @@ export default class CommentRepository {
     return this.prisma.comment.create({ data: createCommentDto });
   }
 
+  async findOne(id) {
+    return this.prisma.comment.findUniqueOrThrow({ where: { id: id } });
+  }
+
   async findMany(
     postId: number | undefined,
     authorId: number | undefined,
@@ -22,5 +26,9 @@ export default class CommentRepository {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async remove(commentId: number): Promise<Comment> {
+    return this.prisma.comment.delete({ where: { id: commentId } });
   }
 }

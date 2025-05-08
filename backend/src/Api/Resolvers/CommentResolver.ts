@@ -5,6 +5,7 @@ import { GraphQLContext } from 'src';
 import CreateCommentDto from '../UseCase/Comment/CreateComment/CreateCommentDto';
 import CreateCommentUseCase from '../UseCase/Comment/CreateComment/CreateCommentUseCase';
 import GetManyCommentsUseCase from '../UseCase/Comment/GetManyComment/GetManyCommentUseCase';
+import DeleteCommentUseCase from '../UseCase/Comment/DeleteComment/DeleteCommentUseCase';
 
 @Resolver(Comment)
 export default class CommentResolver {
@@ -31,6 +32,17 @@ export default class CommentResolver {
     return (await this.useCaseFactory.create(GetManyCommentsUseCase)).handle(
       postId,
       authorId,
+    );
+  }
+
+  @Mutation(() => Comment)
+  async deleteComment(
+    @Context() context: GraphQLContext,
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<Comment> {
+    return (await this.useCaseFactory.create(DeleteCommentUseCase)).handle(
+      context.req.session,
+      id,
     );
   }
 }
