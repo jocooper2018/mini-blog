@@ -15,6 +15,8 @@ import {
 import Error404 from '../../Components/Error';
 import Popup from '../../Components/Popup';
 import { Reference } from '@apollo/client';
+import Tabs from '../../Components/Tabs';
+import CommentsList from '../../Components/CommentsList';
 
 interface UserPageProps {
   loggedUser: User | undefined;
@@ -181,15 +183,27 @@ export default function UserPage(props: UserPageProps) {
             <h2>{user?.username}</h2>
           </>
         )}
-        <PostList postList={userPosts} />
+        <hr />
+        <Tabs
+          tabs={[
+            { tabName: 'Posts', tab: <PostList postList={userPosts} /> },
+            {
+              tabName: 'Commentaires',
+              tab: <CommentsList authorId={user.id} linkTo="post" />,
+            },
+          ]}
+        />
         {myAccount ? (
-          <Popup
-            actionText="Supprimer le compte"
-            class="delete"
-            action={handleDeleteUser}
-          >
-            Voulez-vous vraiment supprimer le compte et tous ses posts&nbsp;?
-          </Popup>
+          <>
+            <hr />
+            <Popup
+              actionText="Supprimer le compte"
+              class="delete"
+              action={handleDeleteUser}
+            >
+              Voulez-vous vraiment supprimer le compte et tous ses posts&nbsp;?
+            </Popup>
+          </>
         ) : null}
         {isDeleted ? (
           <Popup

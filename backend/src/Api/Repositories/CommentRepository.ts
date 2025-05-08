@@ -10,4 +10,17 @@ export default class CommentRepository {
   async create(createCommentDto: CreateCommentDto): Promise<Comment> {
     return this.prisma.comment.create({ data: createCommentDto });
   }
+
+  async findMany(
+    postId: number | undefined,
+    authorId: number | undefined,
+  ): Promise<Comment[]> {
+    return this.prisma.comment.findMany({
+      where: {
+        postId: postId,
+        authorId: authorId,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }
