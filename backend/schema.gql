@@ -54,6 +54,7 @@ type Mutation {
   updatePost(updatePostDto: UpdatePostDto!): Post!
   deletePost(id: Int!): Post!
   createComment(createCommentDto: CreateCommentDto!): Comment!
+  deleteComment(id: Int!): Comment!
 }
 
 input CreateUserDto {

@@ -22,6 +22,7 @@ type Mutation {
   createComment(createCommentDto: CreateCommentDto!): Comment!
   createPost(createPostDto: CreatePostDto!): Post!
   createUser(createUserDto: CreateUserDto!): User!
+  deleteComment(id: Int!): Comment!
   deletePost(id: Int!): Post!
   deleteUser(id: Int!): User!
   logIn(logInDto: LogInDto!): User!

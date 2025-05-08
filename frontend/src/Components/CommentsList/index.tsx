@@ -1,17 +1,17 @@
 import './index.css';
 import { JSX, useEffect, useState } from 'react';
-import { Comment } from '../..';
+import { Comment, User } from '../..';
 import { useGetManyCommentLazyQuery } from '../../graphql';
 import CommentComponent from '../Comment';
 
 interface CommentsListProps {
+  loggedUser: User | undefined;
   postId?: number;
   authorId?: number;
   linkTo?: 'post' | 'author';
 }
 
 export default function CommentsList(props: CommentsListProps): JSX.Element {
-
   const [getComments, { data }] = useGetManyCommentLazyQuery();
 
   useEffect(() => {
@@ -37,7 +37,11 @@ export default function CommentsList(props: CommentsListProps): JSX.Element {
     <ul className="comment-list">
       {commentsList.map((comment: Comment) => (
         <li key={`comment-${comment.id}`}>
-          <CommentComponent comment={comment} linkTo={props.linkTo} />
+          <CommentComponent
+            comment={comment}
+            linkTo={props.linkTo}
+            loggedUser={props.loggedUser}
+          />
         </li>
       ))}
     </ul>
