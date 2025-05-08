@@ -1,28 +1,33 @@
 .post-list {
-    list-style: none;
-    padding: 1rem;
+  list-style: none;
+  padding: 1rem;
 }
 
 .post-list > li {
-    border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid #e0e0e0;
 }
 
 .post-list > li:first-child {
-    border-top: 2px solid #e0e0e0;
+  border-top: 2px solid #e0e0e0;
 }
 
 .post-list > li > a {
-    text-decoration: none;
-    color: black;
-    display: block;
-    margin: 1rem;
+  text-decoration: none;
+  color: black;
+  display: block;
+  margin: 1rem;
 }
 
 .post-list > li > a:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 .post-list .post p {
-    max-height: 5rem;
-    overflow: hidden;
+  max-height: 5rem;
+  overflow: hidden;
+}
+
+.post-list.empty {
+  margin-top: 1rem;
+  text-align: center;
 }

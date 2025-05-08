@@ -183,6 +183,7 @@ export default function UserPage(props: UserPageProps) {
             <h2>{user?.username}</h2>
           </>
         )}
+        <hr />
         <Tabs
           tabs={[
             { tabName: 'Posts', tab: <PostList postList={userPosts} /> },
@@ -193,13 +194,16 @@ export default function UserPage(props: UserPageProps) {
           ]}
         />
         {myAccount ? (
-          <Popup
-            actionText="Supprimer le compte"
-            class="delete"
-            action={handleDeleteUser}
-          >
-            Voulez-vous vraiment supprimer le compte et tous ses posts&nbsp;?
-          </Popup>
+          <>
+            <hr />
+            <Popup
+              actionText="Supprimer le compte"
+              class="delete"
+              action={handleDeleteUser}
+            >
+              Voulez-vous vraiment supprimer le compte et tous ses posts&nbsp;?
+            </Popup>
+          </>
         ) : null}
         {isDeleted ? (
           <Popup

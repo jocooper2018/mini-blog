@@ -34,6 +34,14 @@ export default function CommentsList(props: CommentsListProps): JSX.Element {
     })();
   }, []);
 
+  if (commentsList.length === 0) {
+    return (
+      <div className="comment-list empty">
+        <span>Aucuns commentaires</span>
+      </div>
+    );
+  }
+
   return (
     <ul className="comment-list">
       {commentsList.map((comment: Comment) => (

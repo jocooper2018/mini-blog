@@ -15,3 +15,7 @@
 .user-page > button {
   margin: 0 auto;
 }
+
+.user-page hr {
+  margin: 2rem 0;
+}
