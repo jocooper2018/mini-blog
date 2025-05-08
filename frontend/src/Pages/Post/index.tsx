@@ -52,7 +52,7 @@ export default function PostPage(props: PostPageProps) {
       <main>
         <PostComponent postData={postData} myPost={myPost} />
         <CreateComment loggedUser={props.loggedUser} postId={postData.id} />
-        <CommentsList postId={postData.id} />
+        <CommentsList postId={postData.id} loggedUser={props.loggedUser} />
       </main>
     );
   } else {

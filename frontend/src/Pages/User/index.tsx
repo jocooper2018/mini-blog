@@ -189,7 +189,13 @@ export default function UserPage(props: UserPageProps) {
             { tabName: 'Posts', tab: <PostList postList={userPosts} /> },
             {
               tabName: 'Commentaires',
-              tab: <CommentsList authorId={user.id} linkTo="post" />,
+              tab: (
+                <CommentsList
+                  authorId={user.id}
+                  linkTo="post"
+                  loggedUser={props.loggedUser}
+                />
+              ),
             },
           ]}
         />
