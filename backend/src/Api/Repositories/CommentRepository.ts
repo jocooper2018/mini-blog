@@ -20,6 +20,7 @@ export default class CommentRepository {
         postId: postId,
         authorId: authorId,
       },
+      orderBy: { createdAt: 'desc' },
     });
   }
 }
