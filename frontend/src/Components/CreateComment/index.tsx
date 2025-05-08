@@ -4,6 +4,7 @@ import Input from '../Input';
 import { User } from '../..';
 import { Link } from 'react-router-dom';
 import { useCreateCommentMutation } from '../../graphql';
+import { gql, Reference } from '@apollo/client';
 
 interface CreateCommentProps {
   loggedUser: User | undefined;
@@ -17,7 +18,33 @@ export default function CreateComment(props: CreateCommentProps): JSX.Element {
   const [commentContentInputValue, setCommentContentInputValue] =
     useState<string>('');
 
-  const [fetchCreateComment] = useCreateCommentMutation();
+  const [fetchCreateComment] = useCreateCommentMutation({
+    update(cache, { data }) {
+      if (!data?.createComment) return;
+      const newCommentRef = cache.writeFragment({
+        data: data.createComment,
+        fragment: gql`
+          fragment NewComment on Comment {
+            id
+            postId
+            authorId
+            title
+            content
+            createdAt
+            updatedAt
+          }
+        `,
+      });
+      if (!newCommentRef) return;
+      cache.modify({
+        fields: {
+          getManyComment(existingComments: readonly Reference[] = []) {
+            return [newCommentRef, ...existingComments];
+          },
+        },
+      });
+    },
+  });
 
   const handleCreateComment = async (): Promise<void> => {
     if (!props.loggedUser) return;
