@@ -1,0 +1,16 @@
+.tabs nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabs nav button {
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs nav button.selected {
+  border-bottom: 2px solid black;
+}

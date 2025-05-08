@@ -1,10 +1,9 @@
 .comment-list {
   list-style: none;
-  padding: 0;
+  padding: 1rem;
 }
 
 .comment-list > li {
-  padding: 1rem 2rem;
   border-bottom: 2px solid #e0e0e0;
 }
 

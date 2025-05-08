@@ -7,6 +7,7 @@ import CommentComponent from '../Comment';
 interface CommentsListProps {
   postId?: number;
   authorId?: number;
+  linkTo?: 'post' | 'author';
 }
 
 export default function CommentsList(props: CommentsListProps): JSX.Element {
@@ -37,7 +38,7 @@ export default function CommentsList(props: CommentsListProps): JSX.Element {
     <ul className="comment-list">
       {commentsList.map((comment: Comment) => (
         <li key={`comment-${comment.id}`}>
-          <CommentComponent comment={comment} />
+          <CommentComponent comment={comment} linkTo={props.linkTo} />
         </li>
       ))}
     </ul>
