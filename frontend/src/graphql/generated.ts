@@ -122,6 +122,7 @@ export type Query = {
   checkIfUserWithEmailExist: Scalars['Boolean']['output'];
   getAllUsers: Array<User>;
   getLoggedUser: User;
+  getManyComment: Array<Comment>;
   getManyPost: Array<Post>;
   getOnePostById: Post;
   getOneUserById: User;
@@ -130,6 +131,12 @@ export type Query = {
 
 export type QueryCheckIfUserWithEmailExistArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type QueryGetManyCommentArgs = {
+  authorId?: InputMaybe<Scalars['Int']['input']>;
+  postId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -175,6 +182,14 @@ export type CreateCommentMutationVariables = Exact<{
 
 
 export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any } };
+
+export type GetManyCommentQueryVariables = Exact<{
+  postId?: InputMaybe<Scalars['Int']['input']>;
+  authorId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetManyCommentQuery = { __typename?: 'Query', getManyComment: Array<{ __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any }> };
 
 export type CreatePostMutationVariables = Exact<{
   createPostDto: CreatePostDto;
@@ -303,6 +318,53 @@ export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
 export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
 export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
+export const GetManyCommentDocument = gql`
+    query GetManyComment($postId: Int, $authorId: Int) {
+  getManyComment(postId: $postId, authorId: $authorId) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetManyCommentQuery__
+ *
+ * To run a query within a React component, call `useGetManyCommentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetManyCommentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetManyCommentQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      authorId: // value for 'authorId'
+ *   },
+ * });
+ */
+export function useGetManyCommentQuery(baseOptions?: Apollo.QueryHookOptions<GetManyCommentQuery, GetManyCommentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetManyCommentQuery, GetManyCommentQueryVariables>(GetManyCommentDocument, options);
+      }
+export function useGetManyCommentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetManyCommentQuery, GetManyCommentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetManyCommentQuery, GetManyCommentQueryVariables>(GetManyCommentDocument, options);
+        }
+export function useGetManyCommentSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetManyCommentQuery, GetManyCommentQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetManyCommentQuery, GetManyCommentQueryVariables>(GetManyCommentDocument, options);
+        }
+export type GetManyCommentQueryHookResult = ReturnType<typeof useGetManyCommentQuery>;
+export type GetManyCommentLazyQueryHookResult = ReturnType<typeof useGetManyCommentLazyQuery>;
+export type GetManyCommentSuspenseQueryHookResult = ReturnType<typeof useGetManyCommentSuspenseQuery>;
+export type GetManyCommentQueryResult = Apollo.QueryResult<GetManyCommentQuery, GetManyCommentQueryVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($createPostDto: CreatePostDto!) {
   createPost(createPostDto: $createPostDto) {
@@ -810,6 +872,7 @@ export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const namedOperations = {
   Query: {
+    GetManyComment: 'GetManyComment',
     GetManyPost: 'GetManyPost',
     GetOnePostById: 'GetOnePostById',
     CheckIfUserWithEmailExist: 'CheckIfUserWithEmailExist',

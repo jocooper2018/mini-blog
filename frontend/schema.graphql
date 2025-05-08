@@ -44,6 +44,7 @@ type Query {
   checkIfUserWithEmailExist(email: String!): Boolean!
   getAllUsers: [User!]!
   getLoggedUser: User!
+  getManyComment(authorId: Int, postId: Int): [Comment!]!
   getManyPost(authorId: Int): [Post!]!
   getOnePostById(id: Int!): Post!
   getOneUserById(id: Int!): User!

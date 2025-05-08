@@ -1,0 +1,9 @@
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.comment * {
+  margin: 0;
+}
