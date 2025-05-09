@@ -6,6 +6,8 @@ import CreateCommentDto from '../UseCase/Comment/CreateComment/CreateCommentDto'
 import CreateCommentUseCase from '../UseCase/Comment/CreateComment/CreateCommentUseCase';
 import GetManyCommentsUseCase from '../UseCase/Comment/GetManyComment/GetManyCommentUseCase';
 import DeleteCommentUseCase from '../UseCase/Comment/DeleteComment/DeleteCommentUseCase';
+import UpdateCommentDto from '../UseCase/Comment/UpdateComment/UpdateCommentDto';
+import UpdateCommentUseCase from '../UseCase/Comment/UpdateComment/UpdateCommentUseCase';
 
 @Resolver(Comment)
 export default class CommentResolver {
@@ -32,6 +34,17 @@ export default class CommentResolver {
     return (await this.useCaseFactory.create(GetManyCommentsUseCase)).handle(
       postId,
       authorId,
+    );
+  }
+
+  @Mutation(() => Comment)
+  async updateComment(
+    @Context() context: GraphQLContext,
+    @Args('updateCommentDto') updateCommentDto: UpdateCommentDto,
+  ): Promise<Comment> {
+    return (await this.useCaseFactory.create(UpdateCommentUseCase)).handle(
+      context.req.session,
+      updateCommentDto,
     );
   }
 
