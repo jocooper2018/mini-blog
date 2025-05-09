@@ -18,6 +18,24 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  authorId: Scalars['Int']['output'];
+  content: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  postId: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CreateCommentDto = {
+  authorId: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  postId: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type CreatePostDto = {
   authorId: Scalars['Int']['input'];
   content: Scalars['String']['input'];
@@ -37,14 +55,22 @@ export type LogInDto = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createComment: Comment;
   createPost: Post;
   createUser: User;
+  deleteComment: Comment;
   deletePost: Post;
   deleteUser: User;
   logIn: User;
   logOut: Scalars['Boolean']['output'];
+  updateComment: Comment;
   updatePost: Post;
   updateUser: User;
+};
+
+
+export type MutationCreateCommentArgs = {
+  createCommentDto: CreateCommentDto;
 };
 
 
@@ -55,6 +81,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationCreateUserArgs = {
   createUserDto: CreateUserDto;
+};
+
+
+export type MutationDeleteCommentArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -70,6 +101,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationLogInArgs = {
   logInDto: LogInDto;
+};
+
+
+export type MutationUpdateCommentArgs = {
+  updateCommentDto: UpdateCommentDto;
 };
 
 
@@ -98,6 +134,7 @@ export type Query = {
   checkIfUserWithEmailExist: Scalars['Boolean']['output'];
   getAllUsers: Array<User>;
   getLoggedUser: User;
+  getManyComment: Array<Comment>;
   getManyPost: Array<Post>;
   getOnePostById: Post;
   getOneUserById: User;
@@ -106,6 +143,12 @@ export type Query = {
 
 export type QueryCheckIfUserWithEmailExistArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type QueryGetManyCommentArgs = {
+  authorId?: InputMaybe<Scalars['Int']['input']>;
+  postId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -121,6 +164,12 @@ export type QueryGetOnePostByIdArgs = {
 
 export type QueryGetOneUserByIdArgs = {
   id: Scalars['Int']['input'];
+};
+
+export type UpdateCommentDto = {
+  content: Scalars['String']['input'];
+  id: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type UpdatePostDto = {
@@ -144,6 +193,35 @@ export type User = {
   id: Scalars['Int']['output'];
   username: Scalars['String']['output'];
 };
+
+export type CreateCommentMutationVariables = Exact<{
+  createCommentDto: CreateCommentDto;
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment: { __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any } };
+
+export type DeleteCommentMutationVariables = Exact<{
+  commentId: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: { __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any } };
+
+export type GetManyCommentQueryVariables = Exact<{
+  postId?: InputMaybe<Scalars['Int']['input']>;
+  authorId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetManyCommentQuery = { __typename?: 'Query', getManyComment: Array<{ __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any }> };
+
+export type UpdateCommentMutationVariables = Exact<{
+  updateCommentDto: UpdateCommentDto;
+}>;
+
+
+export type UpdateCommentMutation = { __typename?: 'Mutation', updateComment: { __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any } };
 
 export type CreatePostMutationVariables = Exact<{
   createPostDto: CreatePostDto;
@@ -233,6 +311,170 @@ export type UpdateUserMutationVariables = Exact<{
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, username: string, createdAt: any } };
 
 
+export const CreateCommentDocument = gql`
+    mutation CreateComment($createCommentDto: CreateCommentDto!) {
+  createComment(createCommentDto: $createCommentDto) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      createCommentDto: // value for 'createCommentDto'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
+export const DeleteCommentDocument = gql`
+    mutation DeleteComment($commentId: Int!) {
+  deleteComment(id: $commentId) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, options);
+      }
+export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export const GetManyCommentDocument = gql`
+    query GetManyComment($postId: Int, $authorId: Int) {
+  getManyComment(postId: $postId, authorId: $authorId) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetManyCommentQuery__
+ *
+ * To run a query within a React component, call `useGetManyCommentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetManyCommentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetManyCommentQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      authorId: // value for 'authorId'
+ *   },
+ * });
+ */
+export function useGetManyCommentQuery(baseOptions?: Apollo.QueryHookOptions<GetManyCommentQuery, GetManyCommentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetManyCommentQuery, GetManyCommentQueryVariables>(GetManyCommentDocument, options);
+      }
+export function useGetManyCommentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetManyCommentQuery, GetManyCommentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetManyCommentQuery, GetManyCommentQueryVariables>(GetManyCommentDocument, options);
+        }
+export function useGetManyCommentSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetManyCommentQuery, GetManyCommentQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetManyCommentQuery, GetManyCommentQueryVariables>(GetManyCommentDocument, options);
+        }
+export type GetManyCommentQueryHookResult = ReturnType<typeof useGetManyCommentQuery>;
+export type GetManyCommentLazyQueryHookResult = ReturnType<typeof useGetManyCommentLazyQuery>;
+export type GetManyCommentSuspenseQueryHookResult = ReturnType<typeof useGetManyCommentSuspenseQuery>;
+export type GetManyCommentQueryResult = Apollo.QueryResult<GetManyCommentQuery, GetManyCommentQueryVariables>;
+export const UpdateCommentDocument = gql`
+    mutation UpdateComment($updateCommentDto: UpdateCommentDto!) {
+  updateComment(updateCommentDto: $updateCommentDto) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutation, UpdateCommentMutationVariables>;
+
+/**
+ * __useUpdateCommentMutation__
+ *
+ * To run a mutation, you first call `useUpdateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
+ *   variables: {
+ *      updateCommentDto: // value for 'updateCommentDto'
+ *   },
+ * });
+ */
+export function useUpdateCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommentMutation, UpdateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument, options);
+      }
+export type UpdateCommentMutationHookResult = ReturnType<typeof useUpdateCommentMutation>;
+export type UpdateCommentMutationResult = Apollo.MutationResult<UpdateCommentMutation>;
+export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<UpdateCommentMutation, UpdateCommentMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($createPostDto: CreatePostDto!) {
   createPost(createPostDto: $createPostDto) {
@@ -740,6 +982,7 @@ export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const namedOperations = {
   Query: {
+    GetManyComment: 'GetManyComment',
     GetManyPost: 'GetManyPost',
     GetOnePostById: 'GetOnePostById',
     CheckIfUserWithEmailExist: 'CheckIfUserWithEmailExist',
@@ -747,6 +990,9 @@ export const namedOperations = {
     GetOneUserById: 'GetOneUserById'
   },
   Mutation: {
+    CreateComment: 'CreateComment',
+    DeleteComment: 'DeleteComment',
+    UpdateComment: 'UpdateComment',
     CreatePost: 'CreatePost',
     DeletePost: 'DeletePost',
     UpdatePost: 'UpdatePost',

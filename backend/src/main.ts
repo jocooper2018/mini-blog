@@ -26,7 +26,7 @@ async function bootstrap() {
           connectionString: process.env.DATABASE_URL,
         }),
         tableName: 'session',
-        schemaName: 'miniblog',
+        schemaName: 'miniblog_session',
       }),
       secret: process.env.COOKIE_SECRET ?? 'default-secret', // TODO: Change the secret to a secure one
       resave: false,

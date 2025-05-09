@@ -10,6 +10,7 @@ import Post from 'src/Api/Entities/Post';
 import { PostRepository } from 'src/Api/Repositories/PostRepository';
 import UseCaseFactory from '../../UseCaseFactory';
 import GetOnePostUseCase from '../GetOnePost/GetOnePostUseCase';
+import CommentRepository from 'src/Api/Repositories/CommentRepository';
 
 @Injectable()
 export default class DeletePostUseCase
@@ -17,6 +18,7 @@ export default class DeletePostUseCase
 {
   constructor(
     private readonly postRepository: PostRepository,
+    private readonly commentRepository: CommentRepository,
     private readonly useCaseFactory: UseCaseFactory,
   ) {}
 
@@ -31,6 +33,7 @@ export default class DeletePostUseCase
       throw new ForbiddenException("You can't delete someone else post");
     }
     try {
+      await this.commentRepository.removeMany(id, undefined);
       return await this.postRepository.remove(id);
     } catch (error) {
       // https://www.prisma.io/docs/orm/reference/error-reference

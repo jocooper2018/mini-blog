@@ -1,0 +1,29 @@
+.contextual-menu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.contextual-menu > button {
+  display: block;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+}
+
+.contextual-menu > div {
+  position: absolute;
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 0 2rem #0000003f;
+}
+
+.contextual-menu > div > button {
+  text-wrap: nowrap;
+  border-radius: 0;
+  background: none;
+  width: 100%;
+  text-align: left;
+}

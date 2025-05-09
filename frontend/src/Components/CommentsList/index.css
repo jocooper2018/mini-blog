@@ -1,0 +1,17 @@
+.comment-list {
+  list-style: none;
+  padding: 1rem;
+}
+
+.comment-list > li {
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.comment-list > li:first-child {
+  border-top: 2px solid #e0e0e0;
+}
+
+.comment-list.empty {
+  margin-top: 1rem;
+  text-align: center;
+}

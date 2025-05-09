@@ -1,0 +1,11 @@
+query GetManyComment($postId: Int, $authorId: Int) {
+  getManyComment(postId: $postId, authorId: $authorId) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}

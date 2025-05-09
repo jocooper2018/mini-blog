@@ -8,13 +8,26 @@ schema {
 "Indicates exactly one field must be supplied and this field must not be `null`."
 directive @oneOf on INPUT_OBJECT
 
+type Comment {
+  authorId: Int!
+  content: String!
+  createdAt: DateTime!
+  id: Int!
+  postId: Int!
+  title: String!
+  updatedAt: DateTime!
+}
+
 type Mutation {
+  createComment(createCommentDto: CreateCommentDto!): Comment!
   createPost(createPostDto: CreatePostDto!): Post!
   createUser(createUserDto: CreateUserDto!): User!
+  deleteComment(id: Int!): Comment!
   deletePost(id: Int!): Post!
   deleteUser(id: Int!): User!
   logIn(logInDto: LogInDto!): User!
   logOut: Boolean!
+  updateComment(updateCommentDto: UpdateCommentDto!): Comment!
   updatePost(updatePostDto: UpdatePostDto!): Post!
   updateUser(updateUserDto: UpdateUserDto!): User!
 }
@@ -33,6 +46,7 @@ type Query {
   checkIfUserWithEmailExist(email: String!): Boolean!
   getAllUsers: [User!]!
   getLoggedUser: User!
+  getManyComment(authorId: Int, postId: Int): [Comment!]!
   getManyPost(authorId: Int): [Post!]!
   getOnePostById(id: Int!): Post!
   getOneUserById(id: Int!): User!
@@ -47,6 +61,13 @@ type User {
 
 "A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format."
 scalar DateTime
+
+input CreateCommentDto {
+  authorId: Int!
+  content: String!
+  postId: Int!
+  title: String!
+}
 
 input CreatePostDto {
   authorId: Int!
@@ -63,6 +84,12 @@ input CreateUserDto {
 input LogInDto {
   email: String!
   password: String!
+}
+
+input UpdateCommentDto {
+  content: String!
+  id: Int!
+  title: String!
 }
 
 input UpdatePostDto {

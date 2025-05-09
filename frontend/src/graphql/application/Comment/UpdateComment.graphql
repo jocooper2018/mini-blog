@@ -1,0 +1,11 @@
+mutation UpdateComment($updateCommentDto: UpdateCommentDto!) {
+  updateComment(updateCommentDto: $updateCommentDto) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}

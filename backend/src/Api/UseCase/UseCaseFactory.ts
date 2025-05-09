@@ -14,6 +14,7 @@ import LogInUseCase from './User/LogIn/LogInUseCase';
 import GetLoggedUserUseCase from './User/GetLoggedUser/GetLoggedUserUseCase';
 import LogOutUseCase from './User/LogOut/LogOutUseCase';
 import CheckIfUserWithEmailExistUseCase from './User/CheckIfUserWithEmailExist/CheckIfUserWithEmailExistUseCase';
+import AvailableCommentUseCases from './Comment/AvailableCommentUseCases';
 
 type UseCases =
   | CreateUserUseCase
@@ -29,7 +30,8 @@ type UseCases =
   | GetManyPostUseCase
   | GetOnePostUseCase
   | UpdatePostUseCase
-  | DeletePostUseCase;
+  | DeletePostUseCase
+  | AvailableCommentUseCases;
 
 @Injectable()
 export default class UseCaseFactory extends ServiceFactory<UseCases> {}

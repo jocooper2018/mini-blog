@@ -21,7 +21,7 @@ services:
       - 0.0.0.0:${PGADMIN_PORT}:80
     environment:
       VIRTUAL_HOST: localhost
-      PGADMIN_DEFAULT_EMAIL: ${EQUIPE}@dbadmin.com
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_USER}@dbadmin.com
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
       PGADMIN_DISABLE_POSTFIX: true
     networks:

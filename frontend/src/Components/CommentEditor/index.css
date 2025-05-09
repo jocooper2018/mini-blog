@@ -1,0 +1,25 @@
+.comment-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 40rem;
+  max-width: 100%;
+}
+
+.comment-editor label {
+  width: 100%;
+}
+
+.comment-editor textarea {
+  min-height: 3rem;
+  max-height: 10rem;
+  resize: vertical;
+}
+
+.comment-editor div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
