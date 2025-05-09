@@ -5,9 +5,11 @@ import {
   useDeleteCommentMutation,
   useGetOnePostByIdLazyQuery,
   useGetOneUserByIdLazyQuery,
+  useUpdateCommentMutation,
 } from '../../graphql';
 import { Link } from 'react-router-dom';
 import ContextualMenu from '../ContextualMenu';
+import CommentEditor from '../CommentEditor';
 
 interface CommentComponentProps {
   loggedUser: User | undefined;
@@ -20,8 +22,16 @@ export default function CommentComponent(
 ): JSX.Element {
   const [author, setAuthor] = useState<User | undefined>(undefined);
   const [post, setPost] = useState<Post | undefined>(undefined);
+  const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
+  const [commentTitleInputValue, setCommentTitleInputValue] = useState<string>(
+    props.comment.title,
+  );
+  const [commentContentInputValue, setCommentContentInputValue] =
+    useState<string>(props.comment.content);
+
   const [getAuthor] = useGetOneUserByIdLazyQuery();
   const [getPost] = useGetOnePostByIdLazyQuery();
+  const [updateComment] = useUpdateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
 
   const handleGetAuthor = async () => {
@@ -42,6 +52,22 @@ export default function CommentComponent(
       return;
     }
     setPost(queryResult.data.getOnePostById);
+  };
+
+  const handleUpdateComment = async () => {
+    const queryResult = await updateComment({
+      variables: {
+        updateCommentDto: {
+          id: props.comment.id,
+          title: commentTitleInputValue,
+          content: commentContentInputValue,
+        },
+      },
+    });
+    if (!queryResult.data?.updateComment) {
+      return;
+    }
+    setIsEditorOpen(false);
   };
 
   const handleDeleteComment = async () => {
@@ -71,11 +97,17 @@ export default function CommentComponent(
     })();
   }, []);
 
+  const myComment: boolean = props.loggedUser?.id === props.comment.authorId;
+
   return (
     <article className="comment">
-      {props.loggedUser?.id === props.comment.authorId ? (
+      {myComment ? (
         <ContextualMenu
           actions={[
+            {
+              name: 'Modifier',
+              function: async () => setIsEditorOpen(true),
+            },
             {
               name: 'Supprimer',
               function: handleDeleteComment,
@@ -84,13 +116,27 @@ export default function CommentComponent(
           ]}
         />
       ) : null}
-      <h3>{props.comment.title}</h3>
-      {props.linkTo === 'post' ? (
-        <Link to={`/post/${post?.id}`}>{post?.title}</Link>
+      {myComment && isEditorOpen ? (
+        <CommentEditor
+          commentTitleInputValue={commentTitleInputValue}
+          setCommentTitleInputValue={setCommentTitleInputValue}
+          commentContentInputValue={commentContentInputValue}
+          setCommentContentInputValue={setCommentContentInputValue}
+          confirmText="Modifier le commentaire"
+          confirmAction={handleUpdateComment}
+          cancelAction={() => setIsEditorOpen(false)}
+        />
       ) : (
-        <Link to={`/user/${author?.id}`}>{author?.username}</Link>
+        <>
+          <h3>{props.comment.title}</h3>
+          {props.linkTo === 'post' ? (
+            <Link to={`/post/${post?.id}`}>{post?.title}</Link>
+          ) : (
+            <Link to={`/user/${author?.id}`}>{author?.username}</Link>
+          )}
+          <p>{props.comment.content}</p>
+        </>
       )}
-      <p>{props.comment.content}</p>
     </article>
   );
 }

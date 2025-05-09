@@ -1,10 +1,10 @@
 import './index.css';
 import { JSX, useState } from 'react';
-import Input from '../Input';
 import { User } from '../..';
 import { Link } from 'react-router-dom';
 import { useCreateCommentMutation } from '../../graphql';
 import { gql, Reference } from '@apollo/client';
+import CommentEditor from '../CommentEditor';
 
 interface CreateCommentProps {
   loggedUser: User | undefined;
@@ -74,50 +74,15 @@ export default function CreateComment(props: CreateCommentProps): JSX.Element {
     <div className="create-comment">
       {props.loggedUser ? (
         isEditorOpen ? (
-          <form>
-            <Input
-              id="cerate-comment-title"
-              type="text"
-              state={{
-                inputValue: commentTitleInputValue,
-                setInputValue: setCommentTitleInputValue,
-              }}
-              required
-            >
-              Titre
-            </Input>
-            <Input
-              id="cerate-comment-content"
-              type="textarea"
-              state={{
-                inputValue: commentContentInputValue,
-                setInputValue: setCommentContentInputValue,
-              }}
-              required
-            >
-              Commentaire
-            </Input>
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsEditorOpen(false);
-                }}
-              >
-                Annuler
-              </button>
-              <button
-                type="button"
-                onClick={handleCreateComment}
-                disabled={
-                  commentTitleInputValue === '' ||
-                  commentContentInputValue === ''
-                }
-              >
-                Ajouter un commentaire
-              </button>
-            </div>
-          </form>
+          <CommentEditor
+            commentTitleInputValue={commentTitleInputValue}
+            setCommentTitleInputValue={setCommentTitleInputValue}
+            commentContentInputValue={commentContentInputValue}
+            setCommentContentInputValue={setCommentContentInputValue}
+            confirmText="Ajouter un commentaire"
+            confirmAction={handleCreateComment}
+            cancelAction={() => setIsEditorOpen(false)}
+          />
         ) : (
           <button
             type="button"

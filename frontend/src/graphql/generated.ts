@@ -63,6 +63,7 @@ export type Mutation = {
   deleteUser: User;
   logIn: User;
   logOut: Scalars['Boolean']['output'];
+  updateComment: Comment;
   updatePost: Post;
   updateUser: User;
 };
@@ -100,6 +101,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationLogInArgs = {
   logInDto: LogInDto;
+};
+
+
+export type MutationUpdateCommentArgs = {
+  updateCommentDto: UpdateCommentDto;
 };
 
 
@@ -160,6 +166,12 @@ export type QueryGetOneUserByIdArgs = {
   id: Scalars['Int']['input'];
 };
 
+export type UpdateCommentDto = {
+  content: Scalars['String']['input'];
+  id: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type UpdatePostDto = {
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['Int']['input'];
@@ -203,6 +215,13 @@ export type GetManyCommentQueryVariables = Exact<{
 
 
 export type GetManyCommentQuery = { __typename?: 'Query', getManyComment: Array<{ __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any }> };
+
+export type UpdateCommentMutationVariables = Exact<{
+  updateCommentDto: UpdateCommentDto;
+}>;
+
+
+export type UpdateCommentMutation = { __typename?: 'Mutation', updateComment: { __typename?: 'Comment', id: number, authorId: number, postId: number, title: string, content: string, createdAt: any, updatedAt: any } };
 
 export type CreatePostMutationVariables = Exact<{
   createPostDto: CreatePostDto;
@@ -417,6 +436,45 @@ export type GetManyCommentQueryHookResult = ReturnType<typeof useGetManyCommentQ
 export type GetManyCommentLazyQueryHookResult = ReturnType<typeof useGetManyCommentLazyQuery>;
 export type GetManyCommentSuspenseQueryHookResult = ReturnType<typeof useGetManyCommentSuspenseQuery>;
 export type GetManyCommentQueryResult = Apollo.QueryResult<GetManyCommentQuery, GetManyCommentQueryVariables>;
+export const UpdateCommentDocument = gql`
+    mutation UpdateComment($updateCommentDto: UpdateCommentDto!) {
+  updateComment(updateCommentDto: $updateCommentDto) {
+    id
+    authorId
+    postId
+    title
+    content
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutation, UpdateCommentMutationVariables>;
+
+/**
+ * __useUpdateCommentMutation__
+ *
+ * To run a mutation, you first call `useUpdateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
+ *   variables: {
+ *      updateCommentDto: // value for 'updateCommentDto'
+ *   },
+ * });
+ */
+export function useUpdateCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommentMutation, UpdateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument, options);
+      }
+export type UpdateCommentMutationHookResult = ReturnType<typeof useUpdateCommentMutation>;
+export type UpdateCommentMutationResult = Apollo.MutationResult<UpdateCommentMutation>;
+export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<UpdateCommentMutation, UpdateCommentMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($createPostDto: CreatePostDto!) {
   createPost(createPostDto: $createPostDto) {
@@ -934,6 +992,7 @@ export const namedOperations = {
   Mutation: {
     CreateComment: 'CreateComment',
     DeleteComment: 'DeleteComment',
+    UpdateComment: 'UpdateComment',
     CreatePost: 'CreatePost',
     DeletePost: 'DeletePost',
     UpdatePost: 'UpdatePost',

@@ -27,6 +27,7 @@ type Mutation {
   deleteUser(id: Int!): User!
   logIn(logInDto: LogInDto!): User!
   logOut: Boolean!
+  updateComment(updateCommentDto: UpdateCommentDto!): Comment!
   updatePost(updatePostDto: UpdatePostDto!): Post!
   updateUser(updateUserDto: UpdateUserDto!): User!
 }
@@ -83,6 +84,12 @@ input CreateUserDto {
 input LogInDto {
   email: String!
   password: String!
+}
+
+input UpdateCommentDto {
+  content: String!
+  id: Int!
+  title: String!
 }
 
 input UpdatePostDto {
