@@ -1,5 +1,5 @@
-import Popup from '../Popup';
 import './index.css';
+import Popup from '../Popup';
 import { JSX, useRef, useState } from 'react';
 
 interface Action {
@@ -38,6 +38,7 @@ export default function ContextualMenu(
           {props.actions.map((action: Action, i: number) =>
             action.confirmMessage ? (
               <Popup
+                key={`contextual-menu-${i}`}
                 actionText={action.name}
                 action={action.function}
               >
@@ -45,7 +46,7 @@ export default function ContextualMenu(
               </Popup>
             ) : (
               <button
-                key={i}
+                key={`contextual-menu-${i}`}
                 type="button"
                 onClick={() => {
                   action.function();

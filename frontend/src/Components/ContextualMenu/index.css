@@ -24,4 +24,6 @@
   text-wrap: nowrap;
   border-radius: 0;
   background: none;
+  width: 100%;
+  text-align: left;
 }

@@ -3,29 +3,3 @@
   flex-direction: column;
   align-items: center;
 }
-
-.create-comment > form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 40rem;
-  max-width: 100%;
-}
-
-.create-comment label {
-  width: 100%;
-}
-
-.create-comment textarea {
-  min-height: 3rem;
-  max-height: 10rem;
-  resize: vertical;
-}
-
-.create-comment > form > div {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
-}
