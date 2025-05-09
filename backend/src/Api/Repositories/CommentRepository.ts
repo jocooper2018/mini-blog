@@ -43,4 +43,13 @@ export default class CommentRepository {
   async remove(commentId: number): Promise<Comment> {
     return this.prisma.comment.delete({ where: { id: commentId } });
   }
+
+  async removeMany(postId: number | undefined, authorId: number | undefined) {
+    return this.prisma.comment.deleteMany({
+      where: {
+        postId: postId,
+        authorId: authorId,
+      },
+    });
+  }
 }

@@ -14,6 +14,7 @@ import GetManyPostUseCase from '../../Post/GetManyPosts/GetManyPostUseCase';
 import DeletePostUseCase from '../../Post/DeletePost/DeletePostUseCase';
 import LogOutUseCase from '../LogOut/LogOutUseCase';
 import { Response } from 'express';
+import CommentRepository from 'src/Api/Repositories/CommentRepository';
 
 @Injectable()
 export default class DeleteUserUseCase
@@ -22,6 +23,7 @@ export default class DeleteUserUseCase
 {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly commentRepository: CommentRepository,
     private readonly useCaseFactory: UseCaseFactory,
   ) {}
 
@@ -48,6 +50,7 @@ export default class DeleteUserUseCase
       await this.useCaseFactory.create(LogOutUseCase)
     ).handle(session, response);
     try {
+      await this.commentRepository.removeMany(undefined, id);
       return await this.userRepository.remove(id);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
